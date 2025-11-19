@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -214,7 +215,7 @@ private data class Feature(
 )
 
 private val quickActions = listOf(
-    QuickAction("Send Message", Icons.Default.Send) { },
+    QuickAction("Send Message", Icons.AutoMirrored.Filled.Send) { },
     QuickAction("Add Member", Icons.Default.PersonAdd) { },
     QuickAction("View Analytics", Icons.Default.Analytics) { },
     QuickAction("Settings", Icons.Default.Settings) { }
@@ -222,6 +223,6 @@ private val quickActions = listOf(
 
 private val features = listOf(
     Feature("Members", Icons.Default.People) { },
-    Feature("Messaging", Icons.Default.Message) { },
+    Feature("Messaging", Icons.AutoMirrored.Filled.Message) { },
     Feature("Settings", Icons.Default.Settings) { }
 )

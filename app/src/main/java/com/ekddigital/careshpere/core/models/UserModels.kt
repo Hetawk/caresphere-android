@@ -1,5 +1,6 @@
 package com.ekddigital.careshpere.core.models
 
+import com.google.gson.JsonElement
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -18,11 +19,11 @@ data class User(
     @SerialName("display_name") val displayName: String? = null,
     @SerialName("avatar_url") val avatarUrl: String? = null,
     val role: UserRole,
-    val status: UserStatus,
-    @SerialName("email_verified") val emailVerified: Boolean,
+    val status: UserStatus = UserStatus.ACTIVE,
+    @SerialName("email_verified") val emailVerified: Boolean = false,
     @SerialName("last_login_at") val lastLoginAt: String? = null,
     @SerialName("created_at") val createdAt: String,
-    @SerialName("updated_at") val updatedAt: String
+    @SerialName("updated_at") val updatedAt: String? = null
 ) {
     // Computed properties for backward compatibility
     val firstName: String
@@ -58,10 +59,10 @@ data class User(
  * User status enumeration
  */
 @Serializable
-enum class UserStatus(val value: String) {
-    @SerialName("active") ACTIVE("active"),
-    @SerialName("inactive") INACTIVE("inactive"),
-    @SerialName("suspended") SUSPENDED("suspended");
+enum class UserStatus {
+    @SerialName("active") ACTIVE,
+    @SerialName("inactive") INACTIVE,
+    @SerialName("suspended") SUSPENDED;
     
     val displayName: String
         get() = when (this) {
@@ -75,12 +76,12 @@ enum class UserStatus(val value: String) {
  * User roles with associated permissions
  */
 @Serializable
-enum class UserRole(val value: String) {
-    @SerialName("super_admin") SUPER_ADMIN("super_admin"),
-    @SerialName("admin") ADMIN("admin"),
-    @SerialName("ministry_leader") MINISTRY_LEADER("ministry_leader"),
-    @SerialName("volunteer") VOLUNTEER("volunteer"),
-    @SerialName("member") MEMBER("member");
+enum class UserRole {
+    @SerialName("super_admin") SUPER_ADMIN,
+    @SerialName("admin") ADMIN,
+    @SerialName("ministry_leader") MINISTRY_LEADER,
+    @SerialName("volunteer") VOLUNTEER,
+    @SerialName("member") MEMBER;
     
     val displayName: String
         get() = when (this) {
@@ -106,15 +107,15 @@ enum class UserRole(val value: String) {
  */
 @Serializable
 data class UserPermissions(
-    val manageUsers: Boolean,
-    val manageMembers: Boolean,
-    val sendMessages: Boolean,
-    val viewAnalytics: Boolean,
-    val manageAutomation: Boolean,
-    val manageTemplates: Boolean,
-    val manageOrganization: Boolean,
-    val exportData: Boolean,
-    val deleteData: Boolean
+    val manageUsers: Boolean = false,
+    val manageMembers: Boolean = false,
+    val sendMessages: Boolean = false,
+    val viewAnalytics: Boolean = false,
+    val manageAutomation: Boolean = false,
+    val manageTemplates: Boolean = false,
+    val manageOrganization: Boolean = false,
+    val exportData: Boolean = false,
+    val deleteData: Boolean = false
 ) {
     companion object {
         val all = UserPermissions(
@@ -186,7 +187,7 @@ data class UserPermissions(
 data class LoginRequest(
     val email: String,
     val password: String,
-    val rememberMe: Boolean
+    val rememberMe: Boolean = true
 )
 
 @Serializable
@@ -197,12 +198,20 @@ data class LoginResponse(
     val expiresIn: Int
 )
 
+// Use Gson for API wrapper - no need for @Serializable
+data class APISuccessResponse(
+    val success: Boolean,
+    val data: JsonElement? = null,
+    val error: String? = null,
+    val metadata: Map<String, String>? = null
+)
+
 @Serializable
 data class RegisterRequest(
     val email: String,
     val password: String,
-    @SerialName("full_name") val fullName: String,
-    @SerialName("display_name") val displayName: String? = null
+    val fullName: String,
+    val displayName: String? = null
 )
 
 @Serializable
